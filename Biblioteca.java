@@ -23,11 +23,17 @@ public class Biblioteca {
 	  String linea = bufferLectura.readLine();
 	  
 	  while (linea != null) {
-	   String[] generos = linea.split(separador); 
+		  if(!linea.equals("Generos")) {
+			  String[] generos = linea.split(separador); 
 	   
-	   for (int i = 0; i < generos.length; i++) {
-		grafoGeneros.agregarVertice(generos[i]);
-	}
+			  for (int i = 0; i < generos.length; i++) {
+				  grafoGeneros.agregarVertice(generos[i]);
+				  if(generos[i+1] != null) {
+					  grafoGeneros.agregarVertice(generos[i+1]);
+					  grafoGeneros.agregarArco(generos[i], generos[i+1]);
+				  }
+			  }
+		  }
 	   
 	
 	   linea = bufferLectura.readLine();
