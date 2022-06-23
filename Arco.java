@@ -27,6 +27,11 @@ public class Arco<T> {
 	public void setEtiqueta(int etiqueta) {
 		this.etiqueta = etiqueta;
 	}
+
+	@Override
+	public String toString() {
+		return verticeOrigen + "--"+ etiqueta +"-->" + verticeDestino;
+	}
 	
 	
 	

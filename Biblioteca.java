@@ -26,18 +26,20 @@ public class Biblioteca {
 			 if(contador > 0) {
 				   
 				 for (int i = 0; i < generos.length; i++) {
+					 //creo vertice
 					 grafoGeneros.agregarVertice(generos[i]);
-					 if(generos[i+1] != null) { //cuando está en el ultimo genero, el siguiente no da null, sino que no lo lee directamente
-						 grafoGeneros.agregarVertice(generos[i+1]);
+					 //si no es el ultimo
+					 if(generos.length-1 > i) {
 						 grafoGeneros.agregarArco(generos[i], generos[i+1]);
 					 }
-				 }
+				}
 			 }
+			 
+			 
 		 contador++;
 		 linea = bufferLectura.readLine();
 	   
 		 }
-	  
 	 } 
 	 catch (IOException e) {
 	  e.printStackTrace();
