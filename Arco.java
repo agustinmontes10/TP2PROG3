@@ -1,4 +1,4 @@
-package TP2;
+package TP2PROG3;
 
 public class Arco<T> {
 
