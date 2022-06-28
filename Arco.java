@@ -1,6 +1,8 @@
 package TP2PROG3;
 
-public class Arco<T> {
+import java.util.Objects;
+
+public class Arco<T> implements Comparable<Arco>{
 
 	private String verticeOrigen;
 	private String verticeDestino;
@@ -33,6 +35,24 @@ public class Arco<T> {
 		return verticeOrigen + "--"+ etiqueta +"-->" + verticeDestino;
 	}
 	
+	@Override
+	public int compareTo(Arco a) {
+		return a.getEtiqueta() - this.getEtiqueta();
+	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Arco other = (Arco) obj;
+		return etiqueta == other.etiqueta && Objects.equals(verticeDestino, other.verticeDestino)
+				&& Objects.equals(verticeOrigen, other.verticeOrigen);
+	}
 	
 	
 }

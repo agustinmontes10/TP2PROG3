@@ -17,10 +17,10 @@ public class Lector {
         	File file = new File(csv);
 
         	return new BufferedReader(
-        		new InputStreamReader(new FileInputStream(file),"UTF-8")
+        				new InputStreamReader(
+        						new FileInputStream(file),"UTF-8")
         	);
-        	
-        	
+        	        	
         } catch (IOException e) {	
             e.printStackTrace();
         }
