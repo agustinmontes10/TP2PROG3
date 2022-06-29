@@ -20,15 +20,20 @@ public class GrafoDirigido<T>{
 	private int tiempo = 0;
 	
 	public ArrayList<ArrayList<String>> dfs(String origen) {
-		for (String g: vertices.keySet()) {
-			dfsVisitados.put(g, "blanco");
-		}
-		
 		ArrayList<ArrayList<String>> aux = new ArrayList<>();
-		
-		aux = dfs_visit(origen, origen);
-		
-		return aux;
+		if(vertices.containsKey(origen)) {
+			
+			for (String g: vertices.keySet()) {
+				dfsVisitados.put(g, "blanco");
+			}
+			
+			aux = dfs_visit(origen, origen);
+			
+			return aux;
+		} else {
+			System.out.println("El genero ingresado no se encontro, pruebe ingresando otro");
+			return aux;
+		}
 	}
 	
 	public ArrayList<ArrayList<String>> dfs_visit(String genero, String origen) {
@@ -70,15 +75,31 @@ public class GrafoDirigido<T>{
 	public ArrayList<String> generosMasBuscados(String genero, int cantidad) {
 		ArrayList<String> solucion = new ArrayList<>();
 		ArrayList<Arco> adyacentes = this.vertices.get(genero); //arcos que salen de genero 
-		Collections.sort(adyacentes);
-		for (int i = 0; i < cantidad; i++) {
-			solucion.add(adyacentes.get(i).getVerticeDestino());
+		if(adyacentes != null) {
+			Collections.sort(adyacentes);
+			if(adyacentes.size() < cantidad) {
+				System.out.println("Debido a que luego de buscar " + genero + " no se han realizado mas busquedas que la cantidad ingresada, "
+						+ "esta ha sido modificada de " + cantidad + " a " + adyacentes.size());
+				cantidad = adyacentes.size();
+			}
+			for (int i = 0; i < cantidad; i++) {
+				solucion.add(adyacentes.get(i).getVerticeDestino());
+			}
+		} else {
+			System.out.println("El genero no se ha encontrado. Busque otro");
 		}
+		
 		return solucion;
 	}
 	
 	public ArrayList<String> secuenciaMayorValor(String generoOrigen) {
-		return greedy(vertices.get(generoOrigen));
+		if(vertices.containsKey(generoOrigen)) {
+			return greedy(vertices.get(generoOrigen));
+		} else {
+			System.out.println("no existe genero");
+			return new ArrayList<String>();
+		}
+		
 	}
 	
 	
