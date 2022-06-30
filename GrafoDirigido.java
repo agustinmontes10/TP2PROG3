@@ -16,8 +16,7 @@ public class GrafoDirigido<T>{
 	ArrayList<String> visitados = new ArrayList<>();
 	ArrayList<String> fila = new ArrayList<>();
 	HashMap<String, String> dfsVisitados = new HashMap<>();
-	
-	private int tiempo = 0;
+	private int valorSecuencia = 0;
 	
 	public ArrayList<ArrayList<String>> dfs(String origen) {
 		ArrayList<ArrayList<String>> aux = new ArrayList<>();
@@ -112,6 +111,7 @@ public class GrafoDirigido<T>{
 		String base = candidatosOrigen.get(0).getVerticeOrigen();
 		visitados.add(base);
 		solucion.add(base);
+		this.valorSecuencia += candidatosOrigen.get(0).getEtiqueta();
 		
 		while(!candidatos.isEmpty()) {
 			Arco x = seleccionar(candidatos);
@@ -121,11 +121,12 @@ public class GrafoDirigido<T>{
 			if(!visitados.contains(destino)) {
 				visitados.add(destino);
 				solucion.add(destino);
+				this.valorSecuencia += x.getEtiqueta();
 				candidatos.clear();
 				candidatos = new ArrayList<>(this.vertices.get(destino));
 			}
 		}
-		
+		System.out.println("El valor de secuencia es: " + this.valorSecuencia + " y la secuencia es: ");
 		return solucion;
 	}
 
