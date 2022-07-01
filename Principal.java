@@ -10,7 +10,7 @@ public class Principal {
 		t1.start();
 		//System.out.println(b1.generosMasBuscados("viajes", 3));
 		//System.out.println(b1.secuenciaMayorValor("psicología"));
-		System.out.println(b1.dfs("psicología"));
+		System.out.println(b1.dfs("cine"));
 		System.out.println(t1.stop());
 		
 		

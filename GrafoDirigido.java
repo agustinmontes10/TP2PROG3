@@ -1,5 +1,4 @@
 package TP2PROG3;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,7 +16,7 @@ public class GrafoDirigido<T>{
 	private int valorSecuencia = 0;
 	ArrayList<String> verticess = new ArrayList<>();
 	
-	public GrafoDirigido dfs(String origen) {
+	/*public GrafoDirigido dfs(String origen) {
 		GrafoDirigido aux = new GrafoDirigido();
 		ArrayList<ArrayList<String>> solucion = new ArrayList<>();
 		
@@ -73,7 +72,7 @@ public class GrafoDirigido<T>{
 		
 		dfsVisitados.put(genero, "blanco");
 		return solucion;
-	}
+	}*/
 
 	
 	
@@ -210,13 +209,75 @@ public class GrafoDirigido<T>{
 	public String toString() {
 		String solucion = "";
 		for (String s : vertices.keySet()) {
+			solucion += " || " + s + "::  ";
 			for (Arco arco : vertices.get(s)) {
 				solucion += arco.getVerticeOrigen() + "--" + arco.getEtiqueta() + "-->" + arco.getVerticeDestino() + " ";
 			}
+			
 		}
 		return solucion;
 	}
 
+
+	
+	public GrafoDirigido dfs(String origen) {
+		GrafoDirigido solucion = new GrafoDirigido();
+		
+		if(vertices.containsKey(origen)) {
+			dfsVisitados.put(origen, "amarillo");
+			for (String g: vertices.keySet()) {
+				if(!g.equals(origen)) {
+					dfsVisitados.put(g, "blanco");
+				}
+				
+			}
+			
+			solucion = dfs_visit(origen, origen);
+			
+			System.out.println(solucion.vertices.size()  + " vertices");
+			return solucion;
+		} else {
+			System.out.println("El genero ingresado no se encontro, pruebe ingresando otro");
+			return solucion;
+		}
+	}
+	
+	public GrafoDirigido dfs_visit(String genero, String origen) {
+		ArrayList<Arco> adyacentes = vertices.get(genero);
+		Iterator <Arco> it = adyacentes.iterator();
+		ArrayList<ArrayList<String>> solucion = new ArrayList<>();
+		GrafoDirigido grafoSolucion = new GrafoDirigido();
+		dfsVisitados.put(genero, "amarillo");
+		
+		while(it.hasNext()) {
+			Arco sig = it.next();
+			String generoSig = sig.getVerticeDestino();
+			
+			if(dfsVisitados.get(generoSig).equals("blanco")) {
+				GrafoDirigido aux = dfs_visit(generoSig, origen);
+				 if(aux.vertices.size() > 0) {
+					 grafoSolucion = aux;
+					 grafoSolucion.agregarVertice(genero);
+					 grafoSolucion.agregarArco(genero, generoSig);
+				 }
+				
+				
+			} else if (generoSig.equals(origen)) {
+				
+				
+				grafoSolucion.agregarVertice(genero);
+				grafoSolucion.agregarVertice(origen);
+				grafoSolucion.agregarArco(genero, origen);
+				return grafoSolucion;
+				
+			}
+			
+		}
+		
+		dfsVisitados.put(genero, "blanco");
+		return grafoSolucion;
+	}
+	
 	
 
 
