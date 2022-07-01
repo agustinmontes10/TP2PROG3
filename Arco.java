@@ -25,6 +25,10 @@ public class Arco<T> implements Comparable<Arco>{
 	public int getEtiqueta() {
 		return etiqueta;
 	}
+	
+	public void sumar() {
+		etiqueta++;
+	}
 
 	public void setEtiqueta(int etiqueta) {
 		this.etiqueta = etiqueta;

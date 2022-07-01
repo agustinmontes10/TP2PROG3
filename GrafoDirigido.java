@@ -12,21 +12,30 @@ import java.util.List;
 public class GrafoDirigido<T>{
 
 	HashMap<String, ArrayList<Arco>> vertices = new HashMap<>();
-	ArrayList<Arco> arcos = new ArrayList<>();
 	ArrayList<String> visitados = new ArrayList<>();
-	ArrayList<String> fila = new ArrayList<>();
 	HashMap<String, String> dfsVisitados = new HashMap<>();
 	private int valorSecuencia = 0;
+	ArrayList<String> verticess = new ArrayList<>();
 	
-	public ArrayList<ArrayList<String>> dfs(String origen) {
-		ArrayList<ArrayList<String>> aux = new ArrayList<>();
+	public GrafoDirigido dfs(String origen) {
+		GrafoDirigido aux = new GrafoDirigido();
+		ArrayList<ArrayList<String>> solucion = new ArrayList<>();
+		
 		if(vertices.containsKey(origen)) {
-			
 			for (String g: vertices.keySet()) {
 				dfsVisitados.put(g, "blanco");
 			}
 			
-			aux = dfs_visit(origen, origen);
+			solucion = dfs_visit(origen, origen);
+			
+			for (ArrayList<String> arrayList : solucion) {
+				for (int i = 0; i < arrayList.size(); i++) {
+					aux.agregarVertice(arrayList.get(i));
+					if(i+1 < arrayList.size()) {
+						aux.agregarArco(arrayList.get(i), arrayList.get(i+1));
+					}
+				}
+			}
 			
 			return aux;
 		} else {
@@ -41,8 +50,6 @@ public class GrafoDirigido<T>{
 		ArrayList<ArrayList<String>> solucion = new ArrayList<>();
 		dfsVisitados.put(genero, "amarillo");
 		
-		
-		
 		while(it.hasNext()) {
 			Arco sig = it.next();
 			String generoSig = sig.getVerticeDestino();
@@ -53,23 +60,22 @@ public class GrafoDirigido<T>{
 					arrayList.add(0, genero);
 					solucion.add(arrayList);
 				}
-				 
 				
 			} else if (generoSig.equals(origen)) {
 				ArrayList<String> aux = new ArrayList<>();
 				aux.add(genero);
+				aux.add(origen);
 				solucion.add(aux);
 				return solucion;
 			}
 			
-			
 		}
 		
 		dfsVisitados.put(genero, "blanco");
-		
-		
 		return solucion;
 	}
+
+	
 	
 	public ArrayList<String> generosMasBuscados(String genero, int cantidad) {
 		ArrayList<String> solucion = new ArrayList<>();
@@ -100,7 +106,6 @@ public class GrafoDirigido<T>{
 		}
 		
 	}
-	
 	
 	private ArrayList<String> greedy(ArrayList<Arco> candidatosOrigen) {
 		ArrayList<Arco> candidatos = candidatosOrigen;
@@ -135,12 +140,6 @@ public class GrafoDirigido<T>{
 		return candidatos.get(0);
 	}
 
-	public ArrayList<Arco> dameArcos(String origen) {
-		ArrayList<Arco> s = this.vertices.get(origen);
-		Collections.sort(s);
-		return s;
-	}
-	
 	public void getGeneros(String path){
 		String separador = ",";
 		Lector lector = new Lector();
@@ -189,14 +188,8 @@ public class GrafoDirigido<T>{
 		if(!vertices.containsKey(verticeId)) { //si no existe el vertice
 			ArrayList<Arco> arcos = new ArrayList<>(); //creo la lista de arcos vacia
 			vertices.put(verticeId, arcos);	//agrego el vertice con su lista de arco
-			//System.out.println(vertices);
 		}
 		
-	}
-
-	public void borrarVertice(String verticeId) {
-		vertices.remove(verticeId);
-			this.borrarArcos(verticeId);
 	}
 
 
@@ -209,85 +202,22 @@ public class GrafoDirigido<T>{
 			}
 		}
 		Arco<T> arco = new Arco<T>(verticeId1, verticeId2, 1);
-		arcos.add(arco);
 		vertices.get(verticeId1).add(arco);
 	}
 
 	
-	public void borrarArco(String verticeId1, String verticeId2) {
-		for (Arco arco : arcos) {
-			if(arco.getVerticeOrigen().equals(verticeId1) && arco.getVerticeDestino().equals(verticeId2)) {
-				arcos.remove(arco);
+	@Override
+	public String toString() {
+		String solucion = "";
+		for (String s : vertices.keySet()) {
+			for (Arco arco : vertices.get(s)) {
+				solucion += arco.getVerticeOrigen() + "--" + arco.getEtiqueta() + "-->" + arco.getVerticeDestino() + " ";
 			}
 		}
-	}
-	
-	public void borrarArcos(String verticeId1) {
-		for (Arco arco : arcos) {
-			if(arco.getVerticeOrigen().equals(verticeId1)) {
-				arcos.remove(arco);
-			}
-		}
+		return solucion;
 	}
 
 	
-	public boolean contieneVertice(String verticeId) {
-		return vertices.containsKey(verticeId);
-	}
 
-	
-	public boolean existeArco(String verticeId1, String verticeId2) {
-		for (Arco arco : arcos) {
-			if(arco.getVerticeOrigen().equals(verticeId1) && arco.getVerticeDestino().equals(verticeId2)) {
-				return true;
-			}
-		}
-		return false;
-	}
 
-	public Arco<T> obtenerArco(String verticeId1, String verticeId2) {
-		for (Arco arco : arcos) {
-			if(arco.getVerticeOrigen().equals(verticeId1) && arco.getVerticeDestino().equals(verticeId2)) {
-				return arco;
-			}
-		}
-		return null;
-	}
-
-	public int cantidadVertices() {
-		return vertices.size();
-	}
-
-	public int cantidadArcos() {
-		return arcos.size();
-	}
-
-	public Iterator<Integer> obtenerVertices() {
-		Iterator it = vertices.keySet().iterator();
-		return it;
-	}
-
-	public Iterator<Integer> obtenerAdyacentes(String verticeId) {
-		Iterator it = vertices.get(verticeId).iterator();
-		return it;
-	}
-
-	public Iterator<Arco<T>> obtenerArcos() {
-		Iterator it = arcos.iterator();
-		return it;
-	}
-
-	public Iterator<Arco<T>> obtenerArcos(String verticeId) {
-		ArrayList<Arco> aux = new ArrayList<>();
-		for (Arco arco : aux) {
-			if(arco.getVerticeOrigen().equals(verticeId)) {
-				aux.add(arco);
-			}
-		}
-		Iterator it = aux.iterator();
-		return it;
-	}
-
-	
-	
 }
